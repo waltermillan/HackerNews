@@ -51,10 +51,10 @@ The solution implements a high-performance **.NET 8 (C#)** Web API, following **
 
 ## ⚙️ Quick Start
 
-### 1. Clone & Setup
-```bash
-# Clone the repository
-git clone [https://github.com/waltermillan/HackerNews.git](https://github.com/waltermillan/HackerNews.git)
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/waltermillan/HackerNews.git
+    ```
 
 # Navigate to the solution folder
 cd HackerNews/backend
