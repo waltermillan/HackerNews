@@ -20,7 +20,7 @@ public class StoriesController : ControllerBase
     {
         var stories = await _repository.GetBestStoriesAsync(n);
 
-        // Mapeo de Entidad -> DTO
+        // Entity mapping -> DTO
         var response = stories.Select(s => new StoryDto(
             s.Title,
             s.Url,

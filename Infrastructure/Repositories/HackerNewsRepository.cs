@@ -27,7 +27,6 @@ public class HackerNewsRepository : IStoryRepository
 
         if (storyIds == null) return Enumerable.Empty<Story>();
 
-        // Corregido: Ahora usamos HackerNewsItem (el nombre real del record)
         var tasks = storyIds.Take(count).Select(id =>
             _httpClient.GetFromJsonAsync<HackerNewsItem>($"item/{id}.json"));
 
@@ -37,7 +36,6 @@ public class HackerNewsRepository : IStoryRepository
             .Where(x => x != null)
             .Select(item => new Story
             {
-                // Corregido: Usamos las propiedades con mayúscula como en el record
                 Title = item!.Title,
                 Url = item.Url,
                 Author = item.By,

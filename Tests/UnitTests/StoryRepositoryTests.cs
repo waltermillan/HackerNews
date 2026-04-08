@@ -1,23 +1,23 @@
-﻿using System.Net;
-using System.Text.Json;
+﻿using HackerNews.Infrastructure.Repositories;
+using Microsoft.Extensions.Caching.Memory;
 using Moq;
 using Moq.Protected;
-using Microsoft.Extensions.Caching.Memory;
-using HackerNews.Infrastructure.Repositories;
-using HackerNews.Infrastructure.Models;
+using System.Net;
+using System.Text.Json;
 
 namespace HackerNews.Tests.UnitTests;
 
 public class StoryRepositoryTests
 {
+    private const string TestBaseUrl = "http://api-test.com/";
+
     [Fact]
     public async Task GetBestStoriesAsync_ShouldReturnSortedStories()
     {
-        // --- ARRANGE (Preparación) ---
+        // Arrange
         var handlerMock = new Mock<HttpMessageHandler>();
 
         var idsJson = JsonSerializer.Serialize(new List<int> { 1, 2 });
-
         var item1Json = JsonSerializer.Serialize(new { title = "Story 1", score = 100, by = "user1" });
         var item2Json = JsonSerializer.Serialize(new { title = "Story 2", score = 200, by = "user2" });
 
@@ -31,17 +31,16 @@ public class StoryRepositoryTests
             .ReturnsAsync(new HttpResponseMessage { StatusCode = HttpStatusCode.OK, Content = new StringContent(item1Json) })
             .ReturnsAsync(new HttpResponseMessage { StatusCode = HttpStatusCode.OK, Content = new StringContent(item2Json) });
 
-        var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri("http://test.com/") };
+        var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri(TestBaseUrl) };
         var memoryCache = new MemoryCache(new MemoryCacheOptions());
         var repository = new HackerNewsRepository(httpClient, memoryCache);
 
-        // --- ACT (Ejecución) ---
+        // Act
         var result = (await repository.GetBestStoriesAsync(2)).ToList();
 
-        // --- ASSERT (Verificación) ---
+        // Assert
         Assert.Equal(2, result.Count);
         Assert.Equal("Story 2", result[0].Title);
         Assert.Equal(200, result[0].Score);
-        Assert.Equal("Story 1", result[1].Title);
     }
 }

@@ -1,6 +1,5 @@
 ﻿namespace HackerNews.Infrastructure.Models;
 
-// Este es un modelo interno de la capa de infraestructura
 internal record HackerNewsItem(
     string Title,
     string Url,
